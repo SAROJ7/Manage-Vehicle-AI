@@ -1,0 +1,40 @@
+volumes:
+  manage_vehicle_pg_data:
+    external: true
+  manage_vehicle_pg_admin_data:
+    external: true
+
+services:
+  postgres-manage_vehicle:
+    image: postgres:latest
+    restart: always
+    container_name: postgres-manage_vehicle
+    environment:
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASS}
+    volumes:
+      - manage_vehicle_pg_data:/var/lib/postgresql/manage_vehicle_pg_data
+    ports:
+      - '${PG_PORT}:5432'
+    networks:
+      - manage_vehicle_platform
+
+  pgadmin-manage_vehicle:
+    image: dpage/pgadmin4:latest
+    restart: always
+    container_name: pgadmin-manage_vehicle
+    volumes:
+      - manage_vehicle_pg_admin_data:/var/lib/pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASS}
+    ports:
+      - '${PGADMIN_PORT}:80'
+    depends_on:
+      - postgres-manage_vehicle
+    networks:
+      - manage_vehicle_platform
+
+networks:
+  manage_vehicle_platform:
+    external: true
