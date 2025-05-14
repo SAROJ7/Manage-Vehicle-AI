@@ -1,8 +1,18 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { appConfig } from './config';
+import { Bootstrap } from './core';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3000);
+  appConfig.rootPath = __dirname;
+  console.log(`appConfig.rootPath in bootstrap ${appConfig.rootPath}`);
+
+  const bootstrap = new Bootstrap();
+  await bootstrap.initApp();
+  bootstrap.enableCors();
+  bootstrap.setupMiddleware();
+  bootstrap.setupGloblaPipe();
+  bootstrap.setupGlobalPrefix();
+
+  return bootstrap.startApp();
 }
+
 bootstrap();
