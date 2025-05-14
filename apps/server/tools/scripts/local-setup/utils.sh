@@ -40,7 +40,7 @@ start_dev_tools() {
     done
 
     echo "Waiting for the dev tools to start....."
-    sleep 10
+    sleep 2
 }
 
 
