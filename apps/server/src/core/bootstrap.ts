@@ -5,7 +5,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from 'src/app.module';
 import * as express from 'express';
 import helmet from 'helmet';
-import { validateConfig } from 'src/config';
+import { APP, validateConfig } from 'src/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export class Bootstrap {
   private app: NestExpressApplication;
@@ -39,10 +40,28 @@ export class Bootstrap {
 
   async startApp() {
     const port = this.configServuce.get<number>('port') ?? 5500;
+    await this.app.listen(port);
     this.logger.log(
       `🚀 Application is running on: http://localhost:${port}/${this.globalPrefix}`,
     );
-    await this.app.listen(port);
+    this.logger.log(`🚀 API Docs: http://localhost:${port}/api-docs`);
     return port;
+  }
+
+  swaggerSetup() {
+    const config = new DocumentBuilder()
+      .setTitle('Manage Vehicle AI')
+      .setDescription('Manage Vehicle AI')
+      .addBearerAuth({
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: APP.JWT_BEARER,
+      })
+      .setVersion('1.0')
+      .addTag('Manage Vehicle')
+      .build();
+
+    const document = SwaggerModule.createDocument(this.app, config);
+    SwaggerModule.setup('api-docs', this.app, document);
   }
 }

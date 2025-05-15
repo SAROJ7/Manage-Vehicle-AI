@@ -11,6 +11,7 @@ async function bootstrap() {
   bootstrap.setupMiddleware();
   bootstrap.setupGloblaPipe();
   bootstrap.setupGlobalPrefix();
+  bootstrap.swaggerSetup();
 
   return bootstrap.startApp();
 }
