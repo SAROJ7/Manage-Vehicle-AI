@@ -258,7 +258,7 @@ const DesktopSidebar = ({
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <SignOutButton>Log out</SignOutButton>å
+                    <SignOutButton />
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
