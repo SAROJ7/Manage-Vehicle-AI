@@ -4,6 +4,10 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import configuration from './config/configuration';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { OpenaiModule } from './openai/openai.module';
+import { RagTechBookModule } from './rag-tech-book/rag-tech-book.module';
+import { VectorStoreModule } from './vector-store/vector-store.module';
 
 @Module({
   imports: [
@@ -12,6 +16,9 @@ import configuration from './config/configuration';
       load: [configuration],
     }),
     PrismaModule,
+    ThrottlerModule.forRoot([{ ttl: 60000, limit: 10 }]),
+    OpenaiModule,
+    RagTechBookModule,
   ],
   controllers: [AppController],
   providers: [AppService],

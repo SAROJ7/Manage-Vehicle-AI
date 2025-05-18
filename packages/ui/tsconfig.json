@@ -6,6 +6,6 @@
       "@repo/ui/*": ["./src/*"]
     }
   },
-  "include": ["."],
+  "include": [".", "../../apps/web/components/DesktopSidebar.tsx"],
   "exclude": ["node_modules", "dist"]
 }

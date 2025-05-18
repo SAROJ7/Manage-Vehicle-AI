@@ -1,13 +1,30 @@
 import React from "react";
 import { Separator } from "@repo/ui/components/separator";
-import { Button } from "@repo/ui/components/button";
+import DesktopSidebar from "@/components/DesktopSidebar";
+import BreadcrumbHeader from "@/components/BreadcrumbHeader";
+import { ModeToggle } from "@/components/ThemeModeToggle";
+import { SidebarInset, SidebarTrigger } from "@repo/ui/components/sidebar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@repo/ui/components/breadcrumb";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex h-screen">
-      <div className="flex flex-col flex-1 min-h-screen">
+    <div className="flex h-screen overflow-hidden">
+      <div className="w-full shrink-0">
+        <DesktopSidebar>{children}</DesktopSidebar>
+      </div>
+      {/* <div className="flex flex-col flex-1 min-h-screen">
         <header className="flex items-center justify-between px-6 py-4 h-[50px] container">
-          Manage Vehicle AI
+          <BreadcrumbHeader />
+          <div className="gap-1 flex items-center">
+            <ModeToggle />
+          </div>
         </header>
         <Separator />
         <div className="overflow-auto">
@@ -15,7 +32,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             {children}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
