@@ -1,20 +1,11 @@
-import { cn } from "@repo/ui/lib/utils";
-import { SquareDashedMousePointer } from "lucide-react";
-import Link from "next/link";
-import React from "react";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/ui/components/sidebar";
+import { SquareDashedMousePointer } from "lucide-react";
 
-const Logo = ({
-  fontSize = "1xl",
-  iconSize = 15,
-}: {
-  fontSize?: string;
-  iconSize?: number;
-}) => {
+const Logo = ({ iconSize = 15 }: { iconSize?: number }) => {
   return (
     // <Link
     //   href="/"

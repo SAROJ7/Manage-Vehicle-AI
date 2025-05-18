@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@repo/ui/styles/global.css";
 import { AppProviders } from "@/components/providers/AppProviders";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Manage Vehicle AI",
@@ -13,10 +14,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
-        <AppProviders>{children}</AppProviders>
-      </body>
-    </html>
+    <ClerkProvider
+      afterSignOutUrl={"/sign-in"}
+      appearance={{
+        elements: {
+          formButtonPrimary:
+            "bg-primary hover:bg-primary/90 text-sm !shadow-none",
+        },
+      }}
+    >
+      <html lang="en" suppressHydrationWarning>
+        <body>
+          <AppProviders>{children}</AppProviders>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

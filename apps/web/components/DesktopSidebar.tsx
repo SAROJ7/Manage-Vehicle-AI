@@ -1,27 +1,21 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import {
-  BadgeCheck,
-  Bell,
-  BookOpen,
-  Bot,
-  ChevronRight,
-  ChevronsUpDown,
-  CoinsIcon,
-  CreditCard,
-  HistoryIcon,
-  HomeIcon,
-  LogOut,
-  Settings2,
-  ShieldCheckIcon,
-  Sparkles,
-  SquareTerminal,
-} from "lucide-react";
-import React from "react";
-import Logo from "./Logo";
-import Link from "next/link";
-import { buttonVariants } from "@repo/ui/components/button";
-import { usePathname } from "next/navigation";
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@repo/ui/components/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import { Separator } from "@repo/ui/components/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -29,7 +23,6 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -40,37 +33,24 @@ import {
   SidebarRail,
   SidebarTrigger,
 } from "@repo/ui/components/sidebar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@repo/ui/components/collapsible";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
-  DropdownMenuGroup,
-} from "@repo/ui/components/dropdown-menu";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/avatar";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@repo/ui/components/breadcrumb";
-import { Separator } from "@repo/ui/components/separator";
-import { ModeToggle } from "./ThemeModeToggle";
+  BadgeCheck,
+  Bell,
+  BookOpen,
+  Bot,
+  ChevronRight,
+  ChevronsUpDown,
+  CreditCard,
+  Settings2,
+  Sparkles,
+  SquareTerminal,
+} from "lucide-react";
+import Link from "next/link";
+import React from "react";
 import BreadcrumbHeader from "./BreadcrumbHeader";
+import Logo from "./Logo";
+import { ModeToggle } from "./ThemeModeToggle";
 
 const routes = [
   {
@@ -152,44 +132,11 @@ const routes = [
   },
 ];
 
-const user = {
-  name: "shadcn",
-  email: "m@example.com",
-  avatar: "/avatars/shadcn.jpg",
-};
-
-const routers = [
-  {
-    href: "#",
-    label: "Home",
-    icon: HomeIcon,
-  },
-  {
-    href: "history",
-    label: "History",
-    icon: HistoryIcon,
-  },
-  {
-    href: "credentials",
-    label: "Credentials",
-    icon: ShieldCheckIcon,
-  },
-  {
-    href: "billing",
-    label: "Billing",
-    icon: CoinsIcon,
-  },
-];
-
 const DesktopSidebar = ({
   children,
   ...props
 }: React.ComponentProps<typeof Sidebar> & { children: React.ReactNode }) => {
-  const pathname = usePathname();
-  const activeRoute =
-    routers.find(
-      (route) => route.href.length > 0 && pathname.includes(route.href)
-    ) || routers[0];
+  const { user, isLoaded } = useUser();
 
   const isMobile = useIsMobile();
 
@@ -223,7 +170,7 @@ const DesktopSidebar = ({
                         {route.items.map((item) => (
                           <SidebarMenuSubItem key={item.title}>
                             <SidebarMenuSubButton asChild>
-                              <Link href={item.href}>
+                              <Link href={item.href} key={item.href}>
                                 <span>{item.title}</span>
                               </Link>
                             </SidebarMenuSubButton>
@@ -246,15 +193,18 @@ const DesktopSidebar = ({
                     size="lg"
                     className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                   >
-                    <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage src={user.avatar} alt={user.name} />
-                      <AvatarFallback className="rounded-lg">PP</AvatarFallback>
-                    </Avatar>
+                    <img
+                      src={user?.imageUrl}
+                      alt="User Avatar"
+                      className="w-8 h-8 rounded-full flex-shrink-0"
+                    />
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
-                        {user.name}
+                        {isLoaded && user?.fullName}
                       </span>
-                      <span className="truncate text-xs">{user.email}</span>
+                      <span className="truncate text-xs">
+                        {user?.emailAddresses[0]?.emailAddress}
+                      </span>
                     </div>
                     <ChevronsUpDown className="ml-auto size-4" />
                   </SidebarMenuButton>
@@ -265,12 +215,12 @@ const DesktopSidebar = ({
                   align="end"
                   sideOffset={4}
                 >
-                  <DropdownMenuLabel className="p-0 font-normal">
+                  {/* <DropdownMenuLabel className="p-0 font-normal">
                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                       <Avatar className="h-8 w-8 rounded-lg">
                         <AvatarImage src={user.avatar} alt={user.name} />
                         <AvatarFallback className="rounded-lg">
-                          CN
+                          CNnn
                         </AvatarFallback>
                       </Avatar>
                       <div className="grid flex-1 text-left text-sm leading-tight">
@@ -280,8 +230,11 @@ const DesktopSidebar = ({
                         <span className="truncate text-xs">{user.email}</span>
                       </div>
                     </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                    <UserButton>
+                      <SignedIn />
+                    </UserButton>
+                  </DropdownMenuLabel> */}
+                  {/* <DropdownMenuSeparator /> */}
                   <DropdownMenuGroup>
                     <DropdownMenuItem>
                       <Sparkles />
@@ -305,8 +258,7 @@ const DesktopSidebar = ({
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <LogOut />
-                    Log out
+                    <SignOutButton>Log out</SignOutButton>å
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -316,13 +268,13 @@ const DesktopSidebar = ({
         <SidebarRail />
       </Sidebar>
       <div className="flex flex-col flex-1">
-        <header className="flex items-center justify-between px-6 py-4 h-[50px] container bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="flex items-center gap-2 px-4">
+        <header className="flex items-center justify-between px-4 py-4">
+          <div className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
             <BreadcrumbHeader />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="fixed right-4">
             <ModeToggle />
           </div>
         </header>
