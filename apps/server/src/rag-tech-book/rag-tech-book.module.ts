@@ -8,5 +8,6 @@ import { VectorStoreModule } from 'src/vector-store/vector-store.module';
   imports: [OpenaiModule, VectorStoreModule.register('OPEN_AI', 'QDRANT')],
   providers: [RagTechBookService],
   controllers: [RagTechBookController],
+  exports: [RagTechBookService],
 })
 export class RagTechBookModule {}

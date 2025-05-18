@@ -13,20 +13,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum STATUS {
-  Pending
-  Denied
-  Approved
+enum MessageRole {
+  Human
+  Assistant
+  System
 }
 
-model Incident {
-  id           Int     @id @default(autoincrement())
-  title        String
-  description  String
-  aiReport     String?
-  status       STATUS
-  trainingNote String
+model Conversation {
+  id        String    @id @default(cuid())
+  title     String?
+  userId    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@index([userId])
+  @@index([createdAt])
+  @@map("conversations")
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  content        String       @db.Text
+  role           MessageRole
+  metadata       Json?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@index([createdAt])
+  @@map("messages")
 }

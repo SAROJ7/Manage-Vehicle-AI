@@ -8,6 +8,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { OpenaiModule } from './openai/openai.module';
 import { RagTechBookModule } from './rag-tech-book/rag-tech-book.module';
 import { VectorStoreModule } from './vector-store/vector-store.module';
+import { ConversationModule } from './conversation/conversation.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { VectorStoreModule } from './vector-store/vector-store.module';
     ThrottlerModule.forRoot([{ ttl: 60000, limit: 10 }]),
     OpenaiModule,
     RagTechBookModule,
+    ConversationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
